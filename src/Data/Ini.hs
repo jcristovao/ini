@@ -40,7 +40,7 @@ module Data.Ini
   ,parseIni
   ,lookupValue
   ,readValue
-  ,readValueAT
+  ,parseValue
    -- * Writing
   ,writeIniFile
   ,printIni
@@ -95,11 +95,11 @@ readValue :: Text -> Text -> (Text -> Either String (a, Text))
 readValue section key f ini =
   lookupValue section key ini >>= f >>= return . fst
 
--- | Read a value using a reader from "Data.Attoparsec.Text".
-readValueAT :: Text -> Text -> Parser a
-          -> Ini
-          -> Either String a
-readValueAT section key f ini =
+-- | Parse a value using a reader from "Data.Attoparsec.Text".
+parseValue :: Text -> Text -> Parser a
+           -> Ini
+           -> Either String a
+parseValue section key f ini =
   lookupValue section key ini >>= parseOnly (f <* (skipSpace >> endOfInput))
 
 -- | Print the INI config to a file.
